@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Serverless backend for solita-vaccines app",
+  "main": "main.js",
+  "scripts": {
+    "start": "sls offline"
+  },
+  "author": "bea94k",
+  "license": "UNLICENCED",
+  "dependencies": {
+    "serverless-offline": "^7.0.0"
+  }
+}
