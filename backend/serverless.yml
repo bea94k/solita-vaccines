@@ -17,6 +17,13 @@ functions:
           path: test-endpoint
           method: get
           cors: true
+  getAllTimeData:
+    handler: functions/handler.getAllTimeData
+    events:
+      - http:
+          path: all-time-data
+          method: get
+          cors: true
 
 custom:
   serverless-offline:
