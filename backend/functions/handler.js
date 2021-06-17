@@ -12,8 +12,6 @@ exports.getAllTimeData = async () => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      ordersTotal: 5000,
-      vaccinationsTotal: 7000,
       allTimeData: allTimeData.data,
     }),
   };
