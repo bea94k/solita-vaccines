@@ -1,11 +1,4 @@
-const mysql = require("mysql");
-
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "solitaVaccines",
-});
+const connection = require("./config").connection;
 
 exports.startConnection = async () => {
   connection.connect(function (err) {
@@ -15,13 +8,13 @@ exports.startConnection = async () => {
         statusCode: 500,
         body: "Something went wrong when connecting to MySQL server. Check backend console for error message.",
       };
+    } else {
+      console.log("Connected to the MySQL server.");
+      return {
+        statusCode: 200,
+        body: "Connected to MySQL server.",
+      };
     }
-
-    console.log("Connected to the MySQL server.");
-    return {
-      statusCode: 200,
-      body: "Connected to MySQL server.",
-    };
   });
 };
 
@@ -33,12 +26,12 @@ exports.endConnection = async () => {
         statusCode: 500,
         body: "Something went wrong when ending the connection to MySQL server. Check backend console for error message.",
       };
+    } else {
+      console.log("Closing the database connection.");
+      return {
+        statusCode: 200,
+        body: "Closing the connection to MySQL server.",
+      };
     }
-
-    console.log("Closing the database connection.");
-    return {
-      statusCode: 200,
-      body: "Closing the connection to MySQL server.",
-    };
   });
 };
