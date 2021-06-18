@@ -24,6 +24,20 @@ functions:
           path: all-time-data
           method: get
           cors: true
+  startMySQLConnection:
+    handler: functions/mysql/connection.startConnection
+    events:
+      - http:
+          path: start-mysql-connection
+          method: get
+          cors: true
+  endMySQLConnection:
+    handler: functions/mysql/connection.endConnection
+    events:
+      - http:
+          path: end-mysql-connection
+          method: get
+          cors: true
 
 custom:
   serverless-offline:
