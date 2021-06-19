@@ -1,7 +1,6 @@
 const antiqua = require("../resources/Antiqua.json");
 const solarBuddhica = require("../resources/SolarBuddhica.json");
 const zerpfy = require("../resources/Zerpfy.json");
-const vaccinations = require("../resources/vaccinations.json");
 
 const ordersTotal = 5000;
 const vaccinationsTotal = 7000;
@@ -9,149 +8,12 @@ const antiquaAmount = antiqua.length;
 const solarBuddhicaAmount = solarBuddhica.length;
 const zerpfyAmount = zerpfy.length;
 
-let femaleVaccinations = 0,
-  maleVaccinations = 0,
-  nonbinaryVaccinations = 0;
-
-vaccinations.forEach((vacc) => {
-  // producer
-  if (vacc.gender === "female") {
-    femaleVaccinations++;
-  } else if (vacc.gender === "male") {
-    maleVaccinations++;
-  } else {
-    nonbinaryVaccinations++;
-  }
-});
-
-// Antiqua
-let aHYKS = 0,
-  aKYS = 0,
-  aOYS = 0,
-  aTAYS = 0,
-  aTYKS = 0;
-
-antiqua.forEach((order) => {
-  // districts
-  switch (order.healthCareDistrict) {
-    case "HYKS":
-      aHYKS++;
-      break;
-    case "KYS":
-      aKYS++;
-      break;
-    case "OYS":
-      aOYS++;
-      break;
-    case "TAYS":
-      aTAYS++;
-      break;
-    case "TYKS":
-      aTYKS++;
-      break;
-
-    default:
-      break;
-  }
-});
-
-// SolarBuddhica
-let sbHYKS = 0,
-  sbKYS = 0,
-  sbOYS = 0,
-  sbTAYS = 0,
-  sbTYKS = 0;
-
-solarBuddhica.forEach((order) => {
-  // districts
-  switch (order.healthCareDistrict) {
-    case "HYKS":
-      sbHYKS++;
-      break;
-    case "KYS":
-      sbKYS++;
-      break;
-    case "OYS":
-      sbOYS++;
-      break;
-    case "TAYS":
-      sbTAYS++;
-      break;
-    case "TYKS":
-      sbTYKS++;
-      break;
-
-    default:
-      break;
-  }
-});
-
-// Zerpfy
-let zHYKS = 0,
-  zKYS = 0,
-  zOYS = 0,
-  zTAYS = 0,
-  zTYKS = 0;
-
-solarBuddhica.forEach((order) => {
-  // districts
-  switch (order.healthCareDistrict) {
-    case "HYKS":
-      zHYKS++;
-      break;
-    case "KYS":
-      zKYS++;
-      break;
-    case "OYS":
-      zOYS++;
-      break;
-    case "TAYS":
-      zTAYS++;
-      break;
-    case "TYKS":
-      zTYKS++;
-      break;
-
-    default:
-      break;
-  }
-});
-
-/* exports.data = {
-  ordersTotal,
-  vaccinationsTotal,
-  antiquaAmount,
-  solarBuddhicaAmount,
-  zerpfyAmount,
-  femaleVaccinations,
-  maleVaccinations,
-  nonbinaryVaccinations,
-  aHYKS,
-  aKYS,
-  aOYS,
-  aTAYS,
-  aTYKS,
-  sbHYKS,
-  sbKYS,
-  sbOYS,
-  sbTAYS,
-  sbTYKS,
-  aTYKS,
-  zHYKS,
-  zKYS,
-  zOYS,
-  zTAYS,
-  zTYKS,
-}; */
-
 const connection = require("../functions/mysql/config").connection;
 
-let sql = `SELECT vaccination_id, gender FROM vaccinations
-          WHERE gender = 'female'`;
-
-const getFemaleVaccinations = () => {
+// get number of results for a provided statement
+const getSqlData = (sqlStatement) => {
   return new Promise((resolve, reject) => {
-    connection.query(sql, (error, results, fields) => {
+    connection.query(sqlStatement, (error, results, fields) => {
       if (error) {
         console.error(error.message);
         return reject(error.message);
@@ -163,9 +25,123 @@ const getFemaleVaccinations = () => {
   });
 };
 
+// TODO: simplify the statements with =? and putting the value there when calling getSqlData()
+
+const sqlVaccinationsFemale = `SELECT vaccination_id FROM vaccinations
+          WHERE gender = 'female'`;
+const sqlVaccinationsMale = `SELECT vaccination_id FROM vaccinations
+          WHERE gender = 'male'`;
+const sqlVaccinationsNonbinary = `SELECT vaccination_id FROM vaccinations
+          WHERE gender = 'nonbinary'`;
+
+const sqlOrdersAntiquaHYKS = `SELECT id FROM orders
+          WHERE vaccine = 'Antiqua'
+          AND healthCareDistrict = 'HYKS'`;
+const sqlOrdersAntiquaKYS = `SELECT id FROM orders
+          WHERE vaccine = 'Antiqua'
+          AND healthCareDistrict = 'KYS'`;
+const sqlOrdersAntiquaOYS = `SELECT id FROM orders
+          WHERE vaccine = 'Antiqua'
+          AND healthCareDistrict = 'OYS'`;
+const sqlOrdersAntiquaTAYS = `SELECT id FROM orders
+          WHERE vaccine = 'Antiqua'
+          AND healthCareDistrict = 'TAYS'`;
+const sqlOrdersAntiquaTYKS = `SELECT id FROM orders
+          WHERE vaccine = 'Antiqua'
+          AND healthCareDistrict = 'TYKS'`;
+
+const sqlOrdersSolarBuddhicaHYKS = `SELECT id FROM orders
+          WHERE vaccine = 'SolarBuddhica'
+          AND healthCareDistrict = 'HYKS'`;
+const sqlOrdersSolarBuddhicaKYS = `SELECT id FROM orders
+          WHERE vaccine = 'SolarBuddhica'
+          AND healthCareDistrict = 'KYS'`;
+const sqlOrdersSolarBuddhicaOYS = `SELECT id FROM orders
+          WHERE vaccine = 'SolarBuddhica'
+          AND healthCareDistrict = 'OYS'`;
+const sqlOrdersSolarBuddhicaTAYS = `SELECT id FROM orders
+          WHERE vaccine = 'SolarBuddhica'
+          AND healthCareDistrict = 'TAYS'`;
+const sqlOrdersSolarBuddhicaTYKS = `SELECT id FROM orders
+          WHERE vaccine = 'SolarBuddhica'
+          AND healthCareDistrict = 'TYKS'`;
+
+const sqlOrdersZerpfyHYKS = `SELECT id FROM orders
+          WHERE vaccine = 'Zerpfy'
+          AND healthCareDistrict = 'HYKS'`;
+const sqlOrdersZerpfyKYS = `SELECT id FROM orders
+          WHERE vaccine = 'Zerpfy'
+          AND healthCareDistrict = 'KYS'`;
+const sqlOrdersZerpfyOYS = `SELECT id FROM orders
+          WHERE vaccine = 'Zerpfy'
+          AND healthCareDistrict = 'OYS'`;
+const sqlOrdersZerpfyTAYS = `SELECT id FROM orders
+          WHERE vaccine = 'Zerpfy'
+          AND healthCareDistrict = 'TAYS'`;
+const sqlOrdersZerpfyTYKS = `SELECT id FROM orders
+          WHERE vaccine = 'Zerpfy'
+          AND healthCareDistrict = 'TYKS'`;
+
 const getAllData = async () => {
-  const sqlFemaleVaccinations = await getFemaleVaccinations();
-  return { sqlFemaleVaccinations };
+  const femaleVaccinations = await getSqlData(sqlVaccinationsFemale);
+  const maleVaccinations = await getSqlData(sqlVaccinationsMale);
+  const nonbinaryVaccinations = await getSqlData(sqlVaccinationsNonbinary);
+
+  const ordersAntiquaHYKS = await getSqlData(sqlOrdersAntiquaHYKS);
+  const ordersAntiquaKYS = await getSqlData(sqlOrdersAntiquaKYS);
+  const ordersAntiquaOYS = await getSqlData(sqlOrdersAntiquaOYS);
+  const ordersAntiquaTAYS = await getSqlData(sqlOrdersAntiquaTAYS);
+  const ordersAntiquaTYKS = await getSqlData(sqlOrdersAntiquaTYKS);
+
+  const ordersSolarBuddhicaHYKS = await getSqlData(sqlOrdersSolarBuddhicaHYKS);
+  const ordersSolarBuddhicaKYS = await getSqlData(sqlOrdersSolarBuddhicaKYS);
+  const ordersSolarBuddhicaOYS = await getSqlData(sqlOrdersSolarBuddhicaOYS);
+  const ordersSolarBuddhicaTAYS = await getSqlData(sqlOrdersSolarBuddhicaTAYS);
+  const ordersSolarBuddhicaTYKS = await getSqlData(sqlOrdersSolarBuddhicaTYKS);
+
+  const ordersZerpfyHYKS = await getSqlData(sqlOrdersZerpfyHYKS);
+  const ordersZerpfyKYS = await getSqlData(sqlOrdersZerpfyKYS);
+  const ordersZerpfyOYS = await getSqlData(sqlOrdersZerpfyOYS);
+  const ordersZerpfyTAYS = await getSqlData(sqlOrdersZerpfyTAYS);
+  const ordersZerpfyTYKS = await getSqlData(sqlOrdersZerpfyTYKS);
+
+  return {
+    orders: {
+      total: ordersTotal,
+      antiqua: {
+        amount: antiquaAmount,
+        HYKS: ordersAntiquaHYKS,
+        KYS: ordersAntiquaKYS,
+        OYS: ordersAntiquaOYS,
+        TAYS: ordersAntiquaTAYS,
+        TYKS: ordersAntiquaTYKS,
+      },
+      solarBuddhica: {
+        amount: solarBuddhicaAmount,
+        HYKS: ordersSolarBuddhicaHYKS,
+        KYS: ordersSolarBuddhicaKYS,
+        OYS: ordersSolarBuddhicaOYS,
+        TAYS: ordersSolarBuddhicaTAYS,
+        TYKS: ordersSolarBuddhicaTYKS,
+      },
+      zerpfy: {
+        amount: zerpfyAmount,
+        HYKS: ordersZerpfyHYKS,
+        KYS: ordersZerpfyKYS,
+        OYS: ordersZerpfyOYS,
+        TAYS: ordersZerpfyTAYS,
+        TYKS: ordersZerpfyTYKS,
+      },
+    },
+    vaccinations: {
+      total: vaccinationsTotal,
+      genders: {
+        female: femaleVaccinations,
+        male: maleVaccinations,
+        nonbinaryVaccinations: nonbinaryVaccinations,
+      },
+    },
+  };
 };
 
 exports.data = getAllData;
