@@ -12,7 +12,7 @@ exports.getAllTimeData = async () => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      allTimeData: allTimeData.data,
+      allTimeData: await allTimeData.data(),
     }),
   };
 };

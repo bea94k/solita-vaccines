@@ -117,7 +117,7 @@ solarBuddhica.forEach((order) => {
   }
 });
 
-exports.data = {
+/* exports.data = {
   ordersTotal,
   vaccinationsTotal,
   antiquaAmount,
@@ -142,4 +142,30 @@ exports.data = {
   zOYS,
   zTAYS,
   zTYKS,
+}; */
+
+const connection = require("../functions/mysql/config").connection;
+
+let sql = `SELECT vaccination_id, gender FROM vaccinations
+          WHERE gender = 'female'`;
+
+const getFemaleVaccinations = () => {
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (error, results, fields) => {
+      if (error) {
+        console.error(error.message);
+        return reject(error.message);
+      }
+
+      console.log(results.length);
+      return resolve(results.length);
+    });
+  });
 };
+
+const getAllData = async () => {
+  const sqlFemaleVaccinations = await getFemaleVaccinations();
+  return { sqlFemaleVaccinations };
+};
+
+exports.data = getAllData;
