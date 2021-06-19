@@ -11,7 +11,7 @@ const zerpfyAmount = zerpfy.length;
 const connection = require("../functions/mysql/config").connection;
 
 // get number of results for a provided statement
-const getSqlData = (sqlStatement) => {
+const getSqlDataLength = (sqlStatement) => {
   return new Promise((resolve, reject) => {
     connection.query(sqlStatement, (error, results, fields) => {
       if (error) {
@@ -19,8 +19,24 @@ const getSqlData = (sqlStatement) => {
         return reject(error.message);
       }
 
-      console.log(results.length);
+      // console.log(results.length);
       return resolve(results.length);
+    });
+  });
+};
+
+const getSqlInjectionsInBottle = (producer) => {
+  const sqlStatement = `SELECT DISTINCT injections FROM orders
+  WHERE vaccine = '${producer}'`;
+  return new Promise((resolve, reject) => {
+    connection.query(sqlStatement, (error, results, fields) => {
+      if (error) {
+        console.error(error.message);
+        return reject(error.message);
+      }
+
+      // console.log("results", results[0].injections);
+      return resolve(results[0].injections);
     });
   });
 };
@@ -83,33 +99,51 @@ const sqlOrdersZerpfyTYKS = `SELECT id FROM orders
           AND healthCareDistrict = 'TYKS'`;
 
 const getAllData = async () => {
-  const femaleVaccinations = await getSqlData(sqlVaccinationsFemale);
-  const maleVaccinations = await getSqlData(sqlVaccinationsMale);
-  const nonbinaryVaccinations = await getSqlData(sqlVaccinationsNonbinary);
+  const femaleVaccinations = await getSqlDataLength(sqlVaccinationsFemale);
+  const maleVaccinations = await getSqlDataLength(sqlVaccinationsMale);
+  const nonbinaryVaccinations = await getSqlDataLength(
+    sqlVaccinationsNonbinary
+  );
 
-  const ordersAntiquaHYKS = await getSqlData(sqlOrdersAntiquaHYKS);
-  const ordersAntiquaKYS = await getSqlData(sqlOrdersAntiquaKYS);
-  const ordersAntiquaOYS = await getSqlData(sqlOrdersAntiquaOYS);
-  const ordersAntiquaTAYS = await getSqlData(sqlOrdersAntiquaTAYS);
-  const ordersAntiquaTYKS = await getSqlData(sqlOrdersAntiquaTYKS);
+  const ordersAntiquaHYKS = await getSqlDataLength(sqlOrdersAntiquaHYKS);
+  const ordersAntiquaKYS = await getSqlDataLength(sqlOrdersAntiquaKYS);
+  const ordersAntiquaOYS = await getSqlDataLength(sqlOrdersAntiquaOYS);
+  const ordersAntiquaTAYS = await getSqlDataLength(sqlOrdersAntiquaTAYS);
+  const ordersAntiquaTYKS = await getSqlDataLength(sqlOrdersAntiquaTYKS);
+  const injectionsInBottleAntiqua = await getSqlInjectionsInBottle("Antiqua");
 
-  const ordersSolarBuddhicaHYKS = await getSqlData(sqlOrdersSolarBuddhicaHYKS);
-  const ordersSolarBuddhicaKYS = await getSqlData(sqlOrdersSolarBuddhicaKYS);
-  const ordersSolarBuddhicaOYS = await getSqlData(sqlOrdersSolarBuddhicaOYS);
-  const ordersSolarBuddhicaTAYS = await getSqlData(sqlOrdersSolarBuddhicaTAYS);
-  const ordersSolarBuddhicaTYKS = await getSqlData(sqlOrdersSolarBuddhicaTYKS);
+  const ordersSolarBuddhicaHYKS = await getSqlDataLength(
+    sqlOrdersSolarBuddhicaHYKS
+  );
+  const ordersSolarBuddhicaKYS = await getSqlDataLength(
+    sqlOrdersSolarBuddhicaKYS
+  );
+  const ordersSolarBuddhicaOYS = await getSqlDataLength(
+    sqlOrdersSolarBuddhicaOYS
+  );
+  const ordersSolarBuddhicaTAYS = await getSqlDataLength(
+    sqlOrdersSolarBuddhicaTAYS
+  );
+  const ordersSolarBuddhicaTYKS = await getSqlDataLength(
+    sqlOrdersSolarBuddhicaTYKS
+  );
+  const injectionsInBottleSolarBuddhica = await getSqlInjectionsInBottle(
+    "SolarBuddhica"
+  );
 
-  const ordersZerpfyHYKS = await getSqlData(sqlOrdersZerpfyHYKS);
-  const ordersZerpfyKYS = await getSqlData(sqlOrdersZerpfyKYS);
-  const ordersZerpfyOYS = await getSqlData(sqlOrdersZerpfyOYS);
-  const ordersZerpfyTAYS = await getSqlData(sqlOrdersZerpfyTAYS);
-  const ordersZerpfyTYKS = await getSqlData(sqlOrdersZerpfyTYKS);
+  const ordersZerpfyHYKS = await getSqlDataLength(sqlOrdersZerpfyHYKS);
+  const ordersZerpfyKYS = await getSqlDataLength(sqlOrdersZerpfyKYS);
+  const ordersZerpfyOYS = await getSqlDataLength(sqlOrdersZerpfyOYS);
+  const ordersZerpfyTAYS = await getSqlDataLength(sqlOrdersZerpfyTAYS);
+  const ordersZerpfyTYKS = await getSqlDataLength(sqlOrdersZerpfyTYKS);
+  const injectionsInBottleZerpfy = await getSqlInjectionsInBottle("Zerpfy");
 
   return {
     orders: {
       total: ordersTotal,
       antiqua: {
         amount: antiquaAmount,
+        injectionsInBottle: injectionsInBottleAntiqua,
         HYKS: ordersAntiquaHYKS,
         KYS: ordersAntiquaKYS,
         OYS: ordersAntiquaOYS,
@@ -118,6 +152,7 @@ const getAllData = async () => {
       },
       solarBuddhica: {
         amount: solarBuddhicaAmount,
+        injectionsInBottle: injectionsInBottleSolarBuddhica,
         HYKS: ordersSolarBuddhicaHYKS,
         KYS: ordersSolarBuddhicaKYS,
         OYS: ordersSolarBuddhicaOYS,
@@ -126,6 +161,7 @@ const getAllData = async () => {
       },
       zerpfy: {
         amount: zerpfyAmount,
+        injectionsInBottle: injectionsInBottleZerpfy,
         HYKS: ordersZerpfyHYKS,
         KYS: ordersZerpfyKYS,
         OYS: ordersZerpfyOYS,
