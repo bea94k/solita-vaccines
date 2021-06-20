@@ -174,7 +174,7 @@ const getAllData = async () => {
       genders: {
         female: femaleVaccinations,
         male: maleVaccinations,
-        nonbinaryVaccinations: nonbinaryVaccinations,
+        nonbinary: nonbinaryVaccinations,
       },
     },
   };

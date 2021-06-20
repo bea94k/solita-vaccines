@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "./axios";
+import AllTime from "./components/AllTime";
+
 import "./App.css";
 
 const App = () => {
   const [allTimeData, setAllTimeData] = useState();
 
   const fetchAllData = () => {
-    console.log("button clicked");
+    console.log("Fetching all-time data...");
     axios
       .get("/all-time-data")
       .then((resp) => {
-        console.log("general data", resp.data.allTimeData);
+        console.log("all-time data", resp.data.allTimeData);
         setAllTimeData(resp.data.allTimeData);
       })
       .catch((err) => {
@@ -25,7 +27,7 @@ const App = () => {
   return (
     <div className="App">
       <h1>Vaccination stats</h1>
-      {!allTimeData ? <p>No data yet.</p> : <p>Data received.</p>}
+      {!allTimeData ? <p>Loading...</p> : <AllTime allTimeData={allTimeData} />}
     </div>
   );
 };
