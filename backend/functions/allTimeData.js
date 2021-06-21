@@ -2,15 +2,16 @@ const antiqua = require("../resources/Antiqua.json");
 const solarBuddhica = require("../resources/SolarBuddhica.json");
 const zerpfy = require("../resources/Zerpfy.json");
 
+const connection = require("../functions/mysql/config").connection;
+
 const ordersTotal = 5000;
 const vaccinationsTotal = 7000;
 const antiquaAmount = antiqua.length;
 const solarBuddhicaAmount = solarBuddhica.length;
 const zerpfyAmount = zerpfy.length;
 
-const connection = require("../functions/mysql/config").connection;
-
 // get number of results for a provided statement
+// optional use of parameters
 const getSqlDataLength = (sqlStatement, params) => {
   return new Promise((resolve, reject) => {
     connection.query(sqlStatement, params, (error, results, fields) => {
@@ -25,6 +26,7 @@ const getSqlDataLength = (sqlStatement, params) => {
   });
 };
 
+// get number of injections in one bottle of vaccine of a producer
 const getSqlInjectionsInBottle = (producer) => {
   const sqlStatement = `SELECT DISTINCT injections FROM orders
   WHERE vaccine = '${producer}'`;
@@ -41,62 +43,12 @@ const getSqlInjectionsInBottle = (producer) => {
   });
 };
 
-// TODO: simplify the statements with =? and putting the value there when calling getSqlData()
+const sqlVaccinationsGender = `SELECT vaccination_id FROM vaccinations
+          WHERE gender = ?`;
 
-const sqlVaccinationsFemale = `SELECT vaccination_id FROM vaccinations
-          WHERE gender = 'female'`;
-const sqlVaccinationsMale = `SELECT vaccination_id FROM vaccinations
-          WHERE gender = 'male'`;
-const sqlVaccinationsNonbinary = `SELECT vaccination_id FROM vaccinations
-          WHERE gender = 'nonbinary'`;
-
-const sqlOrdersAntiquaHYKS = `SELECT id FROM orders
-          WHERE vaccine = 'Antiqua'
-          AND healthCareDistrict = 'HYKS'`;
-const sqlOrdersAntiquaKYS = `SELECT id FROM orders
-          WHERE vaccine = 'Antiqua'
-          AND healthCareDistrict = 'KYS'`;
-const sqlOrdersAntiquaOYS = `SELECT id FROM orders
-          WHERE vaccine = 'Antiqua'
-          AND healthCareDistrict = 'OYS'`;
-const sqlOrdersAntiquaTAYS = `SELECT id FROM orders
-          WHERE vaccine = 'Antiqua'
-          AND healthCareDistrict = 'TAYS'`;
-const sqlOrdersAntiquaTYKS = `SELECT id FROM orders
-          WHERE vaccine = 'Antiqua'
-          AND healthCareDistrict = 'TYKS'`;
-
-const sqlOrdersSolarBuddhicaHYKS = `SELECT id FROM orders
-          WHERE vaccine = 'SolarBuddhica'
-          AND healthCareDistrict = 'HYKS'`;
-const sqlOrdersSolarBuddhicaKYS = `SELECT id FROM orders
-          WHERE vaccine = 'SolarBuddhica'
-          AND healthCareDistrict = 'KYS'`;
-const sqlOrdersSolarBuddhicaOYS = `SELECT id FROM orders
-          WHERE vaccine = 'SolarBuddhica'
-          AND healthCareDistrict = 'OYS'`;
-const sqlOrdersSolarBuddhicaTAYS = `SELECT id FROM orders
-          WHERE vaccine = 'SolarBuddhica'
-          AND healthCareDistrict = 'TAYS'`;
-const sqlOrdersSolarBuddhicaTYKS = `SELECT id FROM orders
-          WHERE vaccine = 'SolarBuddhica'
-          AND healthCareDistrict = 'TYKS'`;
-
-const sqlOrdersZerpfyHYKS = `SELECT id FROM orders
-          WHERE vaccine = 'Zerpfy'
-          AND healthCareDistrict = 'HYKS'`;
-const sqlOrdersZerpfyKYS = `SELECT id FROM orders
-          WHERE vaccine = 'Zerpfy'
-          AND healthCareDistrict = 'KYS'`;
-const sqlOrdersZerpfyOYS = `SELECT id FROM orders
-          WHERE vaccine = 'Zerpfy'
-          AND healthCareDistrict = 'OYS'`;
-const sqlOrdersZerpfyTAYS = `SELECT id FROM orders
-          WHERE vaccine = 'Zerpfy'
-          AND healthCareDistrict = 'TAYS'`;
-const sqlOrdersZerpfyTYKS = `SELECT id FROM orders
-          WHERE vaccine = 'Zerpfy'
-          AND healthCareDistrict = 'TYKS'`;
+const sqlOrdersProducerDistrict = `SELECT id FROM orders
+          WHERE vaccine = ?
+          AND healthCareDistrict = ?`;
 
 const sqlVaccinationsProducerMonth = `SELECT vaccination_id
           FROM vaccinations v
@@ -106,18 +58,41 @@ const sqlVaccinationsProducerMonth = `SELECT vaccination_id
           AND vaccinationDate LIKE ?`;
 
 const getAllData = async () => {
-  const femaleVaccinations = await getSqlDataLength(sqlVaccinationsFemale);
-  const maleVaccinations = await getSqlDataLength(sqlVaccinationsMale);
-  const nonbinaryVaccinations = await getSqlDataLength(
-    sqlVaccinationsNonbinary
-  );
+  // GENDERS
+  const femaleVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+    "female",
+  ]);
+  const maleVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+    "male",
+  ]);
+  const nonbinaryVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+    "nonbinary",
+  ]);
 
-  const ordersAntiquaHYKS = await getSqlDataLength(sqlOrdersAntiquaHYKS);
-  const ordersAntiquaKYS = await getSqlDataLength(sqlOrdersAntiquaKYS);
-  const ordersAntiquaOYS = await getSqlDataLength(sqlOrdersAntiquaOYS);
-  const ordersAntiquaTAYS = await getSqlDataLength(sqlOrdersAntiquaTAYS);
-  const ordersAntiquaTYKS = await getSqlDataLength(sqlOrdersAntiquaTYKS);
+  // ANTIQUA
+  const ordersAntiquaHYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Antiqua",
+    "HYKS",
+  ]);
+  const ordersAntiquaKYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Antiqua",
+    "KYS",
+  ]);
+  const ordersAntiquaOYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Antiqua",
+    "OYS",
+  ]);
+  const ordersAntiquaTAYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Antiqua",
+    "TAYS",
+  ]);
+  const ordersAntiquaTYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Antiqua",
+    "TYKS",
+  ]);
+
   const injectionsInBottleAntiqua = await getSqlInjectionsInBottle("Antiqua");
+
   const janAntiqua = await getSqlDataLength(sqlVaccinationsProducerMonth, [
     "Antiqua",
     "2021-01%",
@@ -135,24 +110,32 @@ const getAllData = async () => {
     "2021-04%",
   ]);
 
+  // SOLAR BUDDHICA
   const ordersSolarBuddhicaHYKS = await getSqlDataLength(
-    sqlOrdersSolarBuddhicaHYKS
+    sqlOrdersProducerDistrict,
+    ["SolarBuddhica", "HYKS"]
   );
   const ordersSolarBuddhicaKYS = await getSqlDataLength(
-    sqlOrdersSolarBuddhicaKYS
+    sqlOrdersProducerDistrict,
+    ["SolarBuddhica", "KYS"]
   );
   const ordersSolarBuddhicaOYS = await getSqlDataLength(
-    sqlOrdersSolarBuddhicaOYS
+    sqlOrdersProducerDistrict,
+    ["SolarBuddhica", "OYS"]
   );
   const ordersSolarBuddhicaTAYS = await getSqlDataLength(
-    sqlOrdersSolarBuddhicaTAYS
+    sqlOrdersProducerDistrict,
+    ["SolarBuddhica", "TAYS"]
   );
   const ordersSolarBuddhicaTYKS = await getSqlDataLength(
-    sqlOrdersSolarBuddhicaTYKS
+    sqlOrdersProducerDistrict,
+    ["SolarBuddhica", "TYKS"]
   );
+
   const injectionsInBottleSolarBuddhica = await getSqlInjectionsInBottle(
     "SolarBuddhica"
   );
+
   const janSolarBuddhica = await getSqlDataLength(
     sqlVaccinationsProducerMonth,
     ["SolarBuddhica", "2021-01%"]
@@ -170,12 +153,30 @@ const getAllData = async () => {
     ["SolarBuddhica", "2021-04%"]
   );
 
-  const ordersZerpfyHYKS = await getSqlDataLength(sqlOrdersZerpfyHYKS);
-  const ordersZerpfyKYS = await getSqlDataLength(sqlOrdersZerpfyKYS);
-  const ordersZerpfyOYS = await getSqlDataLength(sqlOrdersZerpfyOYS);
-  const ordersZerpfyTAYS = await getSqlDataLength(sqlOrdersZerpfyTAYS);
-  const ordersZerpfyTYKS = await getSqlDataLength(sqlOrdersZerpfyTYKS);
+  // ZERPFY
+  const ordersZerpfyHYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Zerpfy",
+    "HYKS",
+  ]);
+  const ordersZerpfyKYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Zerpfy",
+    "KYS",
+  ]);
+  const ordersZerpfyOYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Zerpfy",
+    "OYS",
+  ]);
+  const ordersZerpfyTAYS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Zerpfy",
+    "TAYS",
+  ]);
+  const ordersZerpfyTYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
+    "Zerpfy",
+    "TYKS",
+  ]);
+
   const injectionsInBottleZerpfy = await getSqlInjectionsInBottle("Zerpfy");
+
   const janZerpfy = await getSqlDataLength(sqlVaccinationsProducerMonth, [
     "Zerpfy",
     "2021-01%",
