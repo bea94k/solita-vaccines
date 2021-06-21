@@ -9,6 +9,7 @@
   "author": "bea94k",
   "license": "UNLICENCED",
   "dependencies": {
+    "date-fns": "^2.22.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {

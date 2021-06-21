@@ -5,6 +5,7 @@ import axios from "../axios";
 import DosesByProducer from "./charts/DosesByProducer";
 import DosesByDistrict from "./charts/DosesByDistrict";
 import VaccinationsByDistricts from "./charts/VaccinationsByDistricts";
+import ExpiredByProducer from "./charts/ExpiredByProducer";
 
 const PerDay = ({ doses }) => {
   const [perDayData, setPerDayData] = useState();
@@ -56,6 +57,9 @@ const PerDay = ({ doses }) => {
 
           <h3>Vaccinations performed - healthcare districts</h3>
           <VaccinationsByDistricts vaccinations={perDayData.vaccinations} />
+
+          <h3>Bottles expired - producers</h3>
+          <ExpiredByProducer expired={perDayData.orders.expired} />
         </>
       )}
     </div>

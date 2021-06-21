@@ -1,3 +1,4 @@
+const add = require("date-fns/add");
 const connection = require("../functions/mysql/config").connection;
 
 // TODO: take the getSqlDataLength out to a separate file
@@ -32,8 +33,19 @@ const sqlOrdersProducerDistrict = `SELECT id FROM orders
           AND healthCareDistrict = ?
           AND arrived LIKE ?`;
 
+const sqlProducerExpiredBottles = `SELECT id FROM orders
+          WHERE vaccine = ?
+          AND arrived LIKE ?`;
+
 const getPerDayData = async (date) => {
   const inclDate = `${date}%`;
+
+  // date of arrival of orders that expire on that day
+  // orders that arrived 30 days earlier
+  const dateObject = new Date(date);
+  const temp = add(dateObject, { days: -30 });
+  const arrivalDateNowExpired = `${temp.toISOString().split("T")[0]}%`;
+
   // GENDERS - DISTRICTS
   const vaccinationsFemaleHYKS = await getSqlDataLength(
     sqlVaccinationsGenderDistrict,
@@ -124,6 +136,10 @@ const getPerDayData = async (date) => {
     "TYKS",
     inclDate,
   ]);
+  const ordersAntiquaExpired = await getSqlDataLength(
+    sqlProducerExpiredBottles,
+    ["Antiqua", arrivalDateNowExpired]
+  );
   const ordersAntiqua =
     ordersAntiquaHYKS +
     ordersAntiquaKYS +
@@ -151,6 +167,10 @@ const getPerDayData = async (date) => {
   const ordersSolarBuddhicaTYKS = await getSqlDataLength(
     sqlOrdersProducerDistrict,
     ["SolarBuddhica", "TYKS", inclDate]
+  );
+  const ordersSolarBuddhicaExpired = await getSqlDataLength(
+    sqlProducerExpiredBottles,
+    ["SolarBuddhica", arrivalDateNowExpired]
   );
   const ordersSolarBuddhica =
     ordersSolarBuddhicaHYKS +
@@ -185,6 +205,10 @@ const getPerDayData = async (date) => {
     "TYKS",
     inclDate,
   ]);
+  const ordersZerpfyExpired = await getSqlDataLength(
+    sqlProducerExpiredBottles,
+    ["Zerpfy", arrivalDateNowExpired]
+  );
   const ordersZerpfy =
     ordersZerpfyHYKS +
     ordersZerpfyKYS +
@@ -218,6 +242,11 @@ const getPerDayData = async (date) => {
         OYS: ordersZerpfyOYS,
         TAYS: ordersZerpfyTAYS,
         TYKS: ordersZerpfyTYKS,
+      },
+      expired: {
+        antiqua: ordersAntiquaExpired,
+        solarBuddhica: ordersSolarBuddhicaExpired,
+        zerpfy: ordersZerpfyExpired,
       },
     },
     vaccinations: {
