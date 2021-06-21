@@ -2,6 +2,7 @@ import React from "react";
 import DosesByProducer from "./charts/DosesByProducer";
 import DosesByDistrict from "./charts/DosesByDistrict";
 import VaccinationsByGender from "./charts/VaccinationsByGender";
+import VaccinationsByMonth from "./charts/VaccinationsByMonth";
 
 const AllTime = ({ allTimeData }) => {
   const totalInjections =
@@ -27,9 +28,10 @@ const AllTime = ({ allTimeData }) => {
 
       <h3>Vaccinations performed - genders</h3>
       <p>{allTimeData.vaccinations.total} vaccinations</p>
-      <VaccinationsByGender
-        vaccinationsByGender={allTimeData.vaccinations.genders}
-      />
+      <VaccinationsByGender vaccinations={allTimeData.vaccinations.genders} />
+
+      <h3>Vaccinations performed - months</h3>
+      <VaccinationsByMonth vaccinations={allTimeData.vaccinations.months} />
     </div>
   );
 };

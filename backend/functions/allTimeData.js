@@ -11,9 +11,9 @@ const zerpfyAmount = zerpfy.length;
 const connection = require("../functions/mysql/config").connection;
 
 // get number of results for a provided statement
-const getSqlDataLength = (sqlStatement) => {
+const getSqlDataLength = (sqlStatement, params) => {
   return new Promise((resolve, reject) => {
-    connection.query(sqlStatement, (error, results, fields) => {
+    connection.query(sqlStatement, params, (error, results, fields) => {
       if (error) {
         console.error(error.message);
         return reject(error.message);
@@ -98,6 +98,13 @@ const sqlOrdersZerpfyTYKS = `SELECT id FROM orders
           WHERE vaccine = 'Zerpfy'
           AND healthCareDistrict = 'TYKS'`;
 
+const sqlVaccinationsProducerMonth = `SELECT vaccination_id
+          FROM vaccinations v
+          JOIN orders o
+            ON v.sourceBottle = o.id
+          WHERE vaccine = ?
+          AND vaccinationDate LIKE ?`;
+
 const getAllData = async () => {
   const femaleVaccinations = await getSqlDataLength(sqlVaccinationsFemale);
   const maleVaccinations = await getSqlDataLength(sqlVaccinationsMale);
@@ -111,6 +118,22 @@ const getAllData = async () => {
   const ordersAntiquaTAYS = await getSqlDataLength(sqlOrdersAntiquaTAYS);
   const ordersAntiquaTYKS = await getSqlDataLength(sqlOrdersAntiquaTYKS);
   const injectionsInBottleAntiqua = await getSqlInjectionsInBottle("Antiqua");
+  const janAntiqua = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Antiqua",
+    "2021-01%",
+  ]);
+  const febAntiqua = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Antiqua",
+    "2021-02%",
+  ]);
+  const marAntiqua = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Antiqua",
+    "2021-03%",
+  ]);
+  const aprAntiqua = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Antiqua",
+    "2021-04%",
+  ]);
 
   const ordersSolarBuddhicaHYKS = await getSqlDataLength(
     sqlOrdersSolarBuddhicaHYKS
@@ -130,6 +153,22 @@ const getAllData = async () => {
   const injectionsInBottleSolarBuddhica = await getSqlInjectionsInBottle(
     "SolarBuddhica"
   );
+  const janSolarBuddhica = await getSqlDataLength(
+    sqlVaccinationsProducerMonth,
+    ["SolarBuddhica", "2021-01%"]
+  );
+  const febSolarBuddhica = await getSqlDataLength(
+    sqlVaccinationsProducerMonth,
+    ["SolarBuddhica", "2021-02%"]
+  );
+  const marSolarBuddhica = await getSqlDataLength(
+    sqlVaccinationsProducerMonth,
+    ["SolarBuddhica", "2021-03%"]
+  );
+  const aprSolarBuddhica = await getSqlDataLength(
+    sqlVaccinationsProducerMonth,
+    ["SolarBuddhica", "2021-04%"]
+  );
 
   const ordersZerpfyHYKS = await getSqlDataLength(sqlOrdersZerpfyHYKS);
   const ordersZerpfyKYS = await getSqlDataLength(sqlOrdersZerpfyKYS);
@@ -137,6 +176,22 @@ const getAllData = async () => {
   const ordersZerpfyTAYS = await getSqlDataLength(sqlOrdersZerpfyTAYS);
   const ordersZerpfyTYKS = await getSqlDataLength(sqlOrdersZerpfyTYKS);
   const injectionsInBottleZerpfy = await getSqlInjectionsInBottle("Zerpfy");
+  const janZerpfy = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Zerpfy",
+    "2021-01%",
+  ]);
+  const febZerpfy = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Zerpfy",
+    "2021-02%",
+  ]);
+  const marZerpfy = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Zerpfy",
+    "2021-03%",
+  ]);
+  const aprZerpfy = await getSqlDataLength(sqlVaccinationsProducerMonth, [
+    "Zerpfy",
+    "2021-04%",
+  ]);
 
   return {
     orders: {
@@ -175,6 +230,28 @@ const getAllData = async () => {
         female: femaleVaccinations,
         male: maleVaccinations,
         nonbinary: nonbinaryVaccinations,
+      },
+      months: {
+        jan: {
+          antiqua: janAntiqua,
+          solarBuddhica: janSolarBuddhica,
+          zerpfy: janZerpfy,
+        },
+        feb: {
+          antiqua: febAntiqua,
+          solarBuddhica: febSolarBuddhica,
+          zerpfy: febZerpfy,
+        },
+        mar: {
+          antiqua: marAntiqua,
+          solarBuddhica: marSolarBuddhica,
+          zerpfy: marZerpfy,
+        },
+        apr: {
+          antiqua: aprAntiqua,
+          solarBuddhica: aprSolarBuddhica,
+          zerpfy: aprZerpfy,
+        },
       },
     },
   };
