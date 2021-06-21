@@ -60,6 +60,12 @@ const getPerDayData = async (date) => {
     "TYKS",
     inclDate,
   ]);
+  const ordersAntiqua =
+    ordersAntiquaHYKS +
+    ordersAntiquaKYS +
+    ordersAntiquaOYS +
+    ordersAntiquaTAYS +
+    ordersAntiquaTYKS;
 
   // SOLARBUDDHICA
   const ordersSolarBuddhicaHYKS = await getSqlDataLength(
@@ -82,6 +88,12 @@ const getPerDayData = async (date) => {
     sqlOrdersProducerDistrict,
     ["SolarBuddhica", "TYKS", inclDate]
   );
+  const ordersSolarBuddhica =
+    ordersSolarBuddhicaHYKS +
+    ordersSolarBuddhicaKYS +
+    ordersSolarBuddhicaOYS +
+    ordersSolarBuddhicaTAYS +
+    ordersSolarBuddhicaTYKS;
 
   // ZERPFY
   const ordersZerpfyHYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
@@ -109,16 +121,18 @@ const getPerDayData = async (date) => {
     "TYKS",
     inclDate,
   ]);
+  const ordersZerpfy =
+    ordersZerpfyHYKS +
+    ordersZerpfyKYS +
+    ordersZerpfyOYS +
+    ordersZerpfyTAYS +
+    ordersZerpfyTYKS;
 
   return {
     orders: {
+      total: ordersAntiqua + ordersSolarBuddhica + ordersZerpfy,
       antiqua: {
-        amount:
-          ordersAntiquaHYKS +
-          ordersAntiquaKYS +
-          ordersAntiquaOYS +
-          ordersAntiquaTAYS +
-          ordersAntiquaTYKS,
+        amount: ordersAntiqua,
         HYKS: ordersAntiquaHYKS,
         KYS: ordersAntiquaKYS,
         OYS: ordersAntiquaOYS,
@@ -126,12 +140,7 @@ const getPerDayData = async (date) => {
         TYKS: ordersAntiquaTYKS,
       },
       solarBuddhica: {
-        amount:
-          ordersSolarBuddhicaHYKS +
-          ordersSolarBuddhicaKYS +
-          ordersSolarBuddhicaOYS +
-          ordersSolarBuddhicaTAYS +
-          ordersSolarBuddhicaTYKS,
+        amount: ordersSolarBuddhica,
         HYKS: ordersSolarBuddhicaHYKS,
         KYS: ordersSolarBuddhicaKYS,
         OYS: ordersSolarBuddhicaOYS,
@@ -139,12 +148,7 @@ const getPerDayData = async (date) => {
         TYKS: ordersSolarBuddhicaTYKS,
       },
       zerpfy: {
-        amount:
-          ordersZerpfyHYKS +
-          ordersZerpfyKYS +
-          ordersZerpfyOYS +
-          ordersZerpfyTAYS +
-          ordersZerpfyTYKS,
+        amount: ordersZerpfy,
         HYKS: ordersZerpfyHYKS,
         KYS: ordersZerpfyKYS,
         OYS: ordersZerpfyOYS,
