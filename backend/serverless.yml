@@ -24,6 +24,13 @@ functions:
           path: all-time-data
           method: get
           cors: true
+  getPerDayData:
+    handler: functions/handler.getPerDayData
+    events:
+      - http:
+          path: /per-day-data/{date}
+          method: get
+          cors: true
   startMySQLConnection:
     handler: functions/mysql/connection.startConnection
     events:
