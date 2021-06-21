@@ -1,7 +1,7 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
-const DosesByDistrict = ({ orders }) => {
+const DosesByDistrict = ({ orders, doses }) => {
   const data = {
     labels: ["HYKS", "KYS", "OYS", "TAYS", "TYKS"],
     datasets: [
@@ -9,11 +9,11 @@ const DosesByDistrict = ({ orders }) => {
         stack: "stack1",
         label: "Antiqua",
         data: [
-          orders.antiqua.HYKS * orders.antiqua.injectionsInBottle,
-          orders.antiqua.KYS * orders.antiqua.injectionsInBottle,
-          orders.antiqua.OYS * orders.antiqua.injectionsInBottle,
-          orders.antiqua.TAYS * orders.antiqua.injectionsInBottle,
-          orders.antiqua.TYKS * orders.antiqua.injectionsInBottle,
+          orders.antiqua.HYKS * doses.antiqua,
+          orders.antiqua.KYS * doses.antiqua,
+          orders.antiqua.OYS * doses.antiqua,
+          orders.antiqua.TAYS * doses.antiqua,
+          orders.antiqua.TYKS * doses.antiqua,
         ],
         backgroundColor: ["red"],
       },
@@ -21,11 +21,11 @@ const DosesByDistrict = ({ orders }) => {
         stack: "stack1",
         label: "SolarBuddhica",
         data: [
-          orders.solarBuddhica.HYKS * orders.solarBuddhica.injectionsInBottle,
-          orders.solarBuddhica.KYS * orders.solarBuddhica.injectionsInBottle,
-          orders.solarBuddhica.OYS * orders.solarBuddhica.injectionsInBottle,
-          orders.solarBuddhica.TAYS * orders.solarBuddhica.injectionsInBottle,
-          orders.solarBuddhica.TYKS * orders.solarBuddhica.injectionsInBottle,
+          orders.solarBuddhica.HYKS * doses.solarBuddhica,
+          orders.solarBuddhica.KYS * doses.solarBuddhica,
+          orders.solarBuddhica.OYS * doses.solarBuddhica,
+          orders.solarBuddhica.TAYS * doses.solarBuddhica,
+          orders.solarBuddhica.TYKS * doses.solarBuddhica,
         ],
         backgroundColor: ["blue"],
       },
@@ -33,11 +33,11 @@ const DosesByDistrict = ({ orders }) => {
         stack: "stack1",
         label: "Zerpfy",
         data: [
-          orders.zerpfy.HYKS * orders.zerpfy.injectionsInBottle,
-          orders.zerpfy.KYS * orders.zerpfy.injectionsInBottle,
-          orders.zerpfy.OYS * orders.zerpfy.injectionsInBottle,
-          orders.zerpfy.TAYS * orders.zerpfy.injectionsInBottle,
-          orders.zerpfy.TYKS * orders.zerpfy.injectionsInBottle,
+          orders.zerpfy.HYKS * doses.zerpfy,
+          orders.zerpfy.KYS * doses.zerpfy,
+          orders.zerpfy.OYS * doses.zerpfy,
+          orders.zerpfy.TAYS * doses.zerpfy,
+          orders.zerpfy.TYKS * doses.zerpfy,
         ],
         backgroundColor: ["yellow"],
       },

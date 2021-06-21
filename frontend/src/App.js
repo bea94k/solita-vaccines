@@ -7,6 +7,7 @@ import "./App.css";
 
 const App = () => {
   const [allTimeData, setAllTimeData] = useState();
+  const [dosesInBottle, setDosesInBottle] = useState({});
   const [showAllTime, setShowAllTime] = useState(true);
 
   const fetchAllData = () => {
@@ -16,6 +17,12 @@ const App = () => {
       .then((resp) => {
         console.log("all-time data", resp.data.allTimeData);
         setAllTimeData(resp.data.allTimeData);
+        setDosesInBottle({
+          antiqua: resp.data.allTimeData.orders.antiqua.injectionsInBottle,
+          solarBuddhica:
+            resp.data.allTimeData.orders.solarBuddhica.injectionsInBottle,
+          zerpfy: resp.data.allTimeData.orders.zerpfy.injectionsInBottle,
+        });
       })
       .catch((err) => {
         console.log("error", err);
@@ -47,10 +54,10 @@ const App = () => {
         !allTimeData ? (
           <p>Loading...</p>
         ) : (
-          <AllTime allTimeData={allTimeData} />
+          <AllTime allTimeData={allTimeData} doses={dosesInBottle} />
         )
       ) : (
-        <PerDay />
+        <PerDay doses={dosesInBottle} />
       )}
     </div>
   );

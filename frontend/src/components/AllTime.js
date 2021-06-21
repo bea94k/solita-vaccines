@@ -4,14 +4,11 @@ import DosesByDistrict from "./charts/DosesByDistrict";
 import VaccinationsByGender from "./charts/VaccinationsByGender";
 import VaccinationsByMonth from "./charts/VaccinationsByMonth";
 
-const AllTime = ({ allTimeData }) => {
+const AllTime = ({ allTimeData, doses }) => {
   const totalInjections =
-    allTimeData.orders.antiqua.amount *
-      allTimeData.orders.antiqua.injectionsInBottle +
-    allTimeData.orders.solarBuddhica.amount *
-      allTimeData.orders.solarBuddhica.injectionsInBottle +
-    allTimeData.orders.zerpfy.amount *
-      allTimeData.orders.zerpfy.injectionsInBottle;
+    allTimeData.orders.antiqua.amount * doses.antiqua +
+    allTimeData.orders.solarBuddhica.amount * doses.solarBuddhica +
+    allTimeData.orders.zerpfy.amount * doses.zerpfy;
 
   return (
     <div style={{ maxWidth: "500px" }}>
@@ -21,10 +18,10 @@ const AllTime = ({ allTimeData }) => {
       <p>
         {totalInjections} doses of vaccine in {allTimeData.orders.total} orders
       </p>
-      <DosesByProducer orders={allTimeData.orders} />
+      <DosesByProducer orders={allTimeData.orders} doses={doses} />
 
       <h3>Doses ordered - healthcare districts</h3>
-      <DosesByDistrict orders={allTimeData.orders} />
+      <DosesByDistrict orders={allTimeData.orders} doses={doses} />
 
       <h3>Vaccinations performed - genders</h3>
       <p>{allTimeData.vaccinations.total} vaccinations</p>
