@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "../axios";
 
 import DosesByProducer from "./charts/DosesByProducer";
+import DosesByDistrict from "./charts/DosesByDistrict";
+import VaccinationsByDistricts from "./charts/VaccinationsByDistricts";
 
 const PerDay = ({ doses }) => {
   const [perDayData, setPerDayData] = useState();
@@ -41,12 +43,19 @@ const PerDay = ({ doses }) => {
         <p>Choose a date</p>
       ) : (
         <>
-          <h3>Doses ordered - producers</h3>
+          <h3>Doses arrived - producers</h3>
+
           <p>
             {totalInjections} doses of vaccine in {perDayData.orders.total}{" "}
             orders
           </p>
           <DosesByProducer orders={perDayData.orders} doses={doses} />
+
+          <h3>Doses arrived - healthcare districts</h3>
+          <DosesByDistrict orders={perDayData.orders} doses={doses} />
+
+          <h3>Vaccinations performed - healthcare districts</h3>
+          <VaccinationsByDistricts vaccinations={perDayData.vaccinations} />
         </>
       )}
     </div>

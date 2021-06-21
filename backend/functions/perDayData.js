@@ -19,8 +19,13 @@ const getSqlDataLength = (sqlStatement, params) => {
   });
 };
 
-const sqlVaccinationsGender = `SELECT vaccination_id FROM vaccinations
-          WHERE gender = ?`;
+const sqlVaccinationsGenderDistrict = `SELECT vaccination_id
+          FROM vaccinations v
+          JOIN orders o
+            ON v.sourceBottle = o.id
+          WHERE gender = ?
+          AND healthCareDistrict = ?
+          AND vaccinationDate LIKE ?`;
 
 const sqlOrdersProducerDistrict = `SELECT id FROM orders
           WHERE vaccine = ?
@@ -29,10 +34,69 @@ const sqlOrdersProducerDistrict = `SELECT id FROM orders
 
 const getPerDayData = async (date) => {
   const inclDate = `${date}%`;
-  // GENDERS
-  const femaleVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
-    "female",
-  ]);
+  // GENDERS - DISTRICTS
+  const vaccinationsFemaleHYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["female", "HYKS", inclDate]
+  );
+  const vaccinationsFemaleKYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["female", "KYS", inclDate]
+  );
+  const vaccinationsFemaleOYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["female", "OYS", inclDate]
+  );
+  const vaccinationsFemaleTAYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["female", "TAYS", inclDate]
+  );
+  const vaccinationsFemaleTYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["female", "TYKS", inclDate]
+  );
+
+  const vaccinationsMaleHYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["male", "HYKS", inclDate]
+  );
+  const vaccinationsMaleKYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["male", "KYS", inclDate]
+  );
+  const vaccinationsMaleOYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["male", "OYS", inclDate]
+  );
+  const vaccinationsMaleTAYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["male", "TAYS", inclDate]
+  );
+  const vaccinationsMaleTYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["male", "TYKS", inclDate]
+  );
+
+  const vaccinationsNonbinaryHYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["nonbinary", "HYKS", inclDate]
+  );
+  const vaccinationsNonbinaryKYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["nonbinary", "KYS", inclDate]
+  );
+  const vaccinationsNonbinaryOYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["nonbinary", "OYS", inclDate]
+  );
+  const vaccinationsNonbinaryTAYS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["nonbinary", "TAYS", inclDate]
+  );
+  const vaccinationsNonbinaryTYKS = await getSqlDataLength(
+    sqlVaccinationsGenderDistrict,
+    ["nonbinary", "TYKS", inclDate]
+  );
 
   // ANTIQUA
   const ordersAntiquaHYKS = await getSqlDataLength(sqlOrdersProducerDistrict, [
@@ -154,6 +218,29 @@ const getPerDayData = async (date) => {
         OYS: ordersZerpfyOYS,
         TAYS: ordersZerpfyTAYS,
         TYKS: ordersZerpfyTYKS,
+      },
+    },
+    vaccinations: {
+      female: {
+        HYKS: vaccinationsFemaleHYKS,
+        KYS: vaccinationsFemaleKYS,
+        OYS: vaccinationsFemaleOYS,
+        TAYS: vaccinationsFemaleTAYS,
+        TYKS: vaccinationsFemaleTYKS,
+      },
+      male: {
+        HYKS: vaccinationsMaleHYKS,
+        KYS: vaccinationsMaleKYS,
+        OYS: vaccinationsMaleOYS,
+        TAYS: vaccinationsMaleTAYS,
+        TYKS: vaccinationsMaleTYKS,
+      },
+      nonbinary: {
+        HYKS: vaccinationsNonbinaryHYKS,
+        KYS: vaccinationsNonbinaryKYS,
+        OYS: vaccinationsNonbinaryOYS,
+        TAYS: vaccinationsNonbinaryTAYS,
+        TYKS: vaccinationsNonbinaryTYKS,
       },
     },
   };

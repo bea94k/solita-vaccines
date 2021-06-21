@@ -14,13 +14,13 @@ const AllTime = ({ allTimeData, doses }) => {
     <div style={{ maxWidth: "500px" }}>
       <h2>All Time Data</h2>
 
-      <h3>Doses ordered - producers</h3>
+      <h3>Doses arrived - producers</h3>
       <p>
         {totalInjections} doses of vaccine in {allTimeData.orders.total} orders
       </p>
       <DosesByProducer orders={allTimeData.orders} doses={doses} />
 
-      <h3>Doses ordered - healthcare districts</h3>
+      <h3>Doses arrived - healthcare districts</h3>
       <DosesByDistrict orders={allTimeData.orders} doses={doses} />
 
       <h3>Vaccinations performed - genders</h3>
