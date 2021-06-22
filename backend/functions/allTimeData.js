@@ -46,6 +46,12 @@ const getSqlInjectionsInBottle = (producer) => {
 const sqlVaccinationsGender = `SELECT vaccination_id FROM vaccinations
           WHERE gender = ?`;
 
+const sqlVaccinationsDistrict = `SELECT vaccination_id
+          FROM vaccinations v
+          JOIN orders o
+            ON v.sourceBottle = o.id
+          WHERE healthCareDistrict = ?`;
+
 const sqlOrdersProducerDistrict = `SELECT id FROM orders
           WHERE vaccine = ?
           AND healthCareDistrict = ?`;
@@ -59,14 +65,31 @@ const sqlVaccinationsProducerMonth = `SELECT vaccination_id
 
 const getAllData = async () => {
   // GENDERS
-  const femaleVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+  const vaccinationsFemale = await getSqlDataLength(sqlVaccinationsGender, [
     "female",
   ]);
-  const maleVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+  const vaccinationsMale = await getSqlDataLength(sqlVaccinationsGender, [
     "male",
   ]);
-  const nonbinaryVaccinations = await getSqlDataLength(sqlVaccinationsGender, [
+  const vaccinationsNonbinary = await getSqlDataLength(sqlVaccinationsGender, [
     "nonbinary",
+  ]);
+
+  // VACCINATIONS - DISTRICTS
+  const vaccinationsHYKS = await getSqlDataLength(sqlVaccinationsDistrict, [
+    "HYKS",
+  ]);
+  const vaccinationsKYS = await getSqlDataLength(sqlVaccinationsDistrict, [
+    "KYS",
+  ]);
+  const vaccinationsOYS = await getSqlDataLength(sqlVaccinationsDistrict, [
+    "OYS",
+  ]);
+  const vaccinationsTAYS = await getSqlDataLength(sqlVaccinationsDistrict, [
+    "TAYS",
+  ]);
+  const vaccinationsTYKS = await getSqlDataLength(sqlVaccinationsDistrict, [
+    "TYKS",
   ]);
 
   // ANTIQUA
@@ -197,6 +220,28 @@ const getAllData = async () => {
   return {
     orders: {
       total: ordersTotal,
+      districtsDoses: {
+        HYKS:
+          ordersAntiquaHYKS * injectionsInBottleAntiqua +
+          ordersSolarBuddhicaHYKS * injectionsInBottleSolarBuddhica +
+          ordersZerpfyHYKS * injectionsInBottleZerpfy,
+        KYS:
+          ordersAntiquaKYS * injectionsInBottleAntiqua +
+          ordersSolarBuddhicaKYS * injectionsInBottleSolarBuddhica +
+          ordersZerpfyKYS * injectionsInBottleZerpfy,
+        OYS:
+          ordersAntiquaOYS * injectionsInBottleAntiqua +
+          ordersSolarBuddhicaOYS * injectionsInBottleSolarBuddhica +
+          ordersZerpfyOYS * injectionsInBottleZerpfy,
+        TAYS:
+          ordersAntiquaTAYS * injectionsInBottleAntiqua +
+          ordersSolarBuddhicaTAYS * injectionsInBottleSolarBuddhica +
+          ordersZerpfyTAYS * injectionsInBottleZerpfy,
+        TYKS:
+          ordersAntiquaTYKS * injectionsInBottleAntiqua +
+          ordersSolarBuddhicaTYKS * injectionsInBottleSolarBuddhica +
+          ordersZerpfyTYKS * injectionsInBottleZerpfy,
+      },
       antiqua: {
         amount: antiquaAmount,
         injectionsInBottle: injectionsInBottleAntiqua,
@@ -228,9 +273,16 @@ const getAllData = async () => {
     vaccinations: {
       total: vaccinationsTotal,
       genders: {
-        female: femaleVaccinations,
-        male: maleVaccinations,
-        nonbinary: nonbinaryVaccinations,
+        female: vaccinationsFemale,
+        male: vaccinationsMale,
+        nonbinary: vaccinationsNonbinary,
+      },
+      districts: {
+        HYKS: vaccinationsHYKS,
+        KYS: vaccinationsKYS,
+        OYS: vaccinationsOYS,
+        TAYS: vaccinationsTAYS,
+        TYKS: vaccinationsTYKS,
       },
       months: {
         jan: {

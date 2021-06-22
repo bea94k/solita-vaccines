@@ -3,6 +3,7 @@ import DosesByProducer from "./charts/DosesByProducer";
 import DosesByDistrict from "./charts/DosesByDistrict";
 import VaccinationsByGender from "./charts/VaccinationsByGender";
 import VaccinationsByMonth from "./charts/VaccinationsByMonth";
+import DosesUsedExpiredByDistrict from "./charts/DosesUsedExpiredByDistrict";
 
 const AllTime = ({ allTimeData, doses }) => {
   const totalInjections =
@@ -29,6 +30,9 @@ const AllTime = ({ allTimeData, doses }) => {
 
       <h3>Vaccinations performed - months</h3>
       <VaccinationsByMonth vaccinations={allTimeData.vaccinations.months} />
+
+      <h3>Doses used VS expired - districts</h3>
+      <DosesUsedExpiredByDistrict allTimeData={allTimeData} doses={doses} />
     </div>
   );
 };
