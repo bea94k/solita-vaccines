@@ -12,27 +12,38 @@ const AllTime = ({ allTimeData, doses }) => {
     allTimeData.orders.zerpfy.amount * doses.zerpfy;
 
   return (
-    <div style={{ maxWidth: "500px" }}>
+    <div>
       <h2>All Time Data</h2>
 
-      <h3>Doses arrived - producers</h3>
-      <p>
-        {totalInjections} doses of vaccine in {allTimeData.orders.total} orders
-      </p>
-      <DosesByProducer orders={allTimeData.orders} doses={doses} />
+      <div className="category-wrap">
+        <h3>Doses arrived - producers</h3>
+        <p>
+          {totalInjections} doses of vaccine in {allTimeData.orders.total}{" "}
+          orders
+        </p>
+        <DosesByProducer orders={allTimeData.orders} doses={doses} />
+      </div>
 
-      <h3>Doses arrived - healthcare districts</h3>
-      <DosesByDistrict orders={allTimeData.orders} doses={doses} />
+      <div className="category-wrap">
+        <h3>Doses arrived - healthcare districts</h3>
+        <DosesByDistrict orders={allTimeData.orders} doses={doses} />
+      </div>
 
-      <h3>Vaccinations performed - genders</h3>
-      <p>{allTimeData.vaccinations.total} vaccinations</p>
-      <VaccinationsByGender vaccinations={allTimeData.vaccinations.genders} />
+      <div className="category-wrap">
+        <h3>Vaccinations performed - genders</h3>
+        <p>{allTimeData.vaccinations.total} vaccinations</p>
+        <VaccinationsByGender vaccinations={allTimeData.vaccinations.genders} />
+      </div>
 
-      <h3>Vaccinations performed - months</h3>
-      <VaccinationsByMonth vaccinations={allTimeData.vaccinations.months} />
+      <div className="category-wrap">
+        <h3>Vaccinations performed - months</h3>
+        <VaccinationsByMonth vaccinations={allTimeData.vaccinations.months} />
+      </div>
 
-      <h3>Doses used VS expired - districts</h3>
-      <DosesUsedExpiredByDistrict allTimeData={allTimeData} doses={doses} />
+      <div className="category-wrap">
+        <h3>Doses used VS expired - districts</h3>
+        <DosesUsedExpiredByDistrict allTimeData={allTimeData} />
+      </div>
     </div>
   );
 };

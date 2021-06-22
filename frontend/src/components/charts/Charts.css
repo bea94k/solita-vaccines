@@ -1,0 +1,15 @@
+.chart-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.pie-chart-wrap {
+    width: 70vw;
+    max-width: 350px;
+}
+
+.bar-chart-wrap,.line-chart-wrap {
+    width: 90vw;
+    max-width: 800px
+}

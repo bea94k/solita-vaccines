@@ -1,5 +1,12 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import "./Charts.css";
+
+const style = getComputedStyle(document.body);
+const antiquaColor = style.getPropertyValue("--pink");
+const solarBuddhicaColor = style.getPropertyValue("--seagreen");
+const zerpfyColor = style.getPropertyValue("--yellow");
+const barBorder = style.getPropertyValue("--gray");
 
 const DosesByDistrict = ({ vaccinations }) => {
   const data = {
@@ -14,7 +21,9 @@ const DosesByDistrict = ({ vaccinations }) => {
           vaccinations.mar.antiqua,
           vaccinations.apr.antiqua,
         ],
-        backgroundColor: ["red"],
+        backgroundColor: antiquaColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
       {
         stack: "stack1",
@@ -25,7 +34,9 @@ const DosesByDistrict = ({ vaccinations }) => {
           vaccinations.mar.solarBuddhica,
           vaccinations.apr.solarBuddhica,
         ],
-        backgroundColor: ["blue"],
+        backgroundColor: solarBuddhicaColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
       {
         stack: "stack1",
@@ -36,12 +47,22 @@ const DosesByDistrict = ({ vaccinations }) => {
           vaccinations.mar.zerpfy,
           vaccinations.apr.zerpfy,
         ],
-        backgroundColor: ["yellow"],
+        backgroundColor: zerpfyColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
     ],
   };
 
-  return <Bar data={data} />;
+  return (
+    <>
+      <div className="chart-wrap">
+        <div className="bar-chart-wrap">
+          <Bar data={data} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default DosesByDistrict;

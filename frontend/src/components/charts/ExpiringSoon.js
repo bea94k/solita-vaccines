@@ -1,5 +1,9 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
+import "./Charts.css";
+
+const style = getComputedStyle(document.body);
+const lineColor = style.getPropertyValue("--dark-seagreen");
 
 const ExpiringSoon = ({ expiring }) => {
   const data = {
@@ -31,7 +35,7 @@ const ExpiringSoon = ({ expiring }) => {
           expiring.ten,
         ],
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: lineColor,
         tension: 0.1,
       },
     ],
@@ -41,7 +45,7 @@ const ExpiringSoon = ({ expiring }) => {
     scales: {
       yAxes: {
         beginAtZero: true,
-        ticks: { stepSize: 20 },
+        ticks: { stepSize: 15 },
       },
     },
     plugins: {
@@ -55,7 +59,15 @@ const ExpiringSoon = ({ expiring }) => {
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <>
+      <div className="chart-wrap">
+        <div className="line-chart-wrap">
+          <Line data={data} options={options} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ExpiringSoon;

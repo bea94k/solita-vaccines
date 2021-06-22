@@ -35,30 +35,43 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Vaccination stats</h1>
+      <h1>Vaccination Statistics</h1>
+      <p>Data available for: 2nd Jan 2021 - 12th Apr 2021</p>
+      <p>
+        Created by{" "}
+        <a href="https://github.com/bea94k" target="_blank" rel="noreferrer">
+          bea94k
+        </a>
+      </p>
+
       <div className="btn-wrap">
         <button
           onClick={() => setShowAllTime(true)}
-          className={showAllTime === true ? "active btn" : "btn"}
+          className={
+            showAllTime === true ? "btn-active btn btn-left" : "btn btn-left"
+          }
         >
           All Time
         </button>
         <button
           onClick={() => setShowAllTime(false)}
-          className={showAllTime === false ? "active btn" : "btn"}
+          className={showAllTime === false ? "btn-active btn" : "btn"}
         >
           Per Day
         </button>
       </div>
-      {showAllTime ? (
-        !allTimeData ? (
-          <p>Loading...</p>
+
+      <div className="content-wrap">
+        {showAllTime ? (
+          !allTimeData ? (
+            <h3>Loading...</h3>
+          ) : (
+            <AllTime allTimeData={allTimeData} doses={dosesInBottle} />
+          )
         ) : (
-          <AllTime allTimeData={allTimeData} doses={dosesInBottle} />
-        )
-      ) : (
-        <PerDay doses={dosesInBottle} />
-      )}
+          <PerDay doses={dosesInBottle} />
+        )}
+      </div>
     </div>
   );
 };

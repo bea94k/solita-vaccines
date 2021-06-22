@@ -1,5 +1,12 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import "./Charts.css";
+
+const style = getComputedStyle(document.body);
+const antiquaColor = style.getPropertyValue("--pink");
+const solarBuddhicaColor = style.getPropertyValue("--seagreen");
+const zerpfyColor = style.getPropertyValue("--yellow");
+const barBorder = style.getPropertyValue("--gray");
 
 const DosesByDistrict = ({ orders, doses }) => {
   const data = {
@@ -15,7 +22,9 @@ const DosesByDistrict = ({ orders, doses }) => {
           orders.antiqua.TAYS * doses.antiqua,
           orders.antiqua.TYKS * doses.antiqua,
         ],
-        backgroundColor: ["red"],
+        backgroundColor: antiquaColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
       {
         stack: "stack1",
@@ -27,7 +36,9 @@ const DosesByDistrict = ({ orders, doses }) => {
           orders.solarBuddhica.TAYS * doses.solarBuddhica,
           orders.solarBuddhica.TYKS * doses.solarBuddhica,
         ],
-        backgroundColor: ["blue"],
+        backgroundColor: solarBuddhicaColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
       {
         stack: "stack1",
@@ -39,12 +50,22 @@ const DosesByDistrict = ({ orders, doses }) => {
           orders.zerpfy.TAYS * doses.zerpfy,
           orders.zerpfy.TYKS * doses.zerpfy,
         ],
-        backgroundColor: ["yellow"],
+        backgroundColor: zerpfyColor,
+        borderWidth: 1,
+        borderColor: barBorder,
       },
     ],
   };
 
-  return <Bar data={data} />;
+  return (
+    <>
+      <div className="chart-wrap">
+        <div className="bar-chart-wrap">
+          <Bar data={data} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default DosesByDistrict;

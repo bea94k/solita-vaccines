@@ -1,7 +1,13 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import "./Charts.css";
 
-const DosesUsedExpiredByDistrict = ({ allTimeData, doses }) => {
+const style = getComputedStyle(document.body);
+const dosesUsedColor = style.getPropertyValue("--darkgreen");
+const dosesExpiredColor = style.getPropertyValue("--brown");
+const barBorder = style.getPropertyValue("--gray");
+
+const DosesUsedExpiredByDistrict = ({ allTimeData }) => {
   const data = {
     labels: ["HYKS", "KYS", "OYS", "TAYS", "TYKS"],
     datasets: [
@@ -14,8 +20,8 @@ const DosesUsedExpiredByDistrict = ({ allTimeData, doses }) => {
           allTimeData.vaccinations.districts.TAYS,
           allTimeData.vaccinations.districts.TYKS,
         ],
-        backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-        borderColor: ["rgb(255, 99, 132)"],
+        backgroundColor: dosesUsedColor,
+        borderColor: barBorder,
         borderWidth: 1,
       },
       {
@@ -33,14 +39,22 @@ const DosesUsedExpiredByDistrict = ({ allTimeData, doses }) => {
           allTimeData.orders.districtsDoses.TYKS -
             allTimeData.vaccinations.districts.TYKS,
         ],
-        backgroundColor: ["blue"],
-        borderColor: ["red"],
+        backgroundColor: dosesExpiredColor,
+        borderColor: barBorder,
         borderWidth: 1,
       },
     ],
   };
 
-  return <Bar data={data} />;
+  return (
+    <>
+      <div className="chart-wrap">
+        <div className="bar-chart-wrap">
+          <Bar data={data} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default DosesUsedExpiredByDistrict;

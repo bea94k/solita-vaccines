@@ -32,10 +32,11 @@ const PerDay = ({ doses }) => {
       perDayData.orders.zerpfy.amount * doses.zerpfy;
 
   return (
-    <div style={{ maxWidth: "500px" }}>
+    <div>
       <h2>Per Day Data</h2>
 
       <input
+        className="date-picker"
         type="date"
         onChange={(e) => fetchPerDayData(e.target.value)}
         min="2021-01-02"
@@ -45,25 +46,34 @@ const PerDay = ({ doses }) => {
         <p>Choose a date</p>
       ) : (
         <>
-          <h3>Doses arrived - producers</h3>
+          <div className="category-wrap">
+            <h3>Doses arrived - producers</h3>
+            <p>
+              {totalInjections} doses of vaccine in {perDayData.orders.total}{" "}
+              orders
+            </p>
+            <DosesByProducer orders={perDayData.orders} doses={doses} />
+          </div>
 
-          <p>
-            {totalInjections} doses of vaccine in {perDayData.orders.total}{" "}
-            orders
-          </p>
-          <DosesByProducer orders={perDayData.orders} doses={doses} />
+          <div className="category-wrap">
+            <h3>Doses arrived - healthcare districts</h3>
+            <DosesByDistrict orders={perDayData.orders} doses={doses} />
+          </div>
 
-          <h3>Doses arrived - healthcare districts</h3>
-          <DosesByDistrict orders={perDayData.orders} doses={doses} />
+          <div className="category-wrap">
+            <h3>Vaccinations performed - healthcare districts</h3>
+            <VaccinationsByDistricts vaccinations={perDayData.vaccinations} />
+          </div>
 
-          <h3>Vaccinations performed - healthcare districts</h3>
-          <VaccinationsByDistricts vaccinations={perDayData.vaccinations} />
+          <div className="category-wrap">
+            <h3>Bottles expired on that day - producers</h3>
+            <ExpiredByProducer expired={perDayData.orders.expired} />
+          </div>
 
-          <h3>Bottles expired on that day - producers</h3>
-          <ExpiredByProducer expired={perDayData.orders.expired} />
-
-          <h3>Bottles expiring in the next 10 days</h3>
-          <ExpiringSoon expiring={perDayData.orders.expiringSoon} />
+          <div className="category-wrap">
+            <h3>Bottles expiring in the next 10 days</h3>
+            <ExpiringSoon expiring={perDayData.orders.expiringSoon} />
+          </div>
         </>
       )}
     </div>

@@ -1,0 +1,58 @@
+.App {
+    text-align: center;
+    color: var(--primary-dark);
+    background-color: var(--primary-offwhite);
+    min-height: 100vh;
+    padding: 2rem 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2, .date-picker {
+    margin-bottom: 1rem;
+}
+
+.btn-wrap {
+margin: 1rem 0;
+}
+
+.btn {
+font-family: inherit;
+font-size: 1rem;
+height: 3rem;
+width: 7rem;
+padding: 0.5rem;
+background-color: var(--primary-light);
+border: solid 2px var(--primary-dark);
+border-radius: 0 5px 5px 0;
+transition: all 0.3s;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background-color: var(--primary-dark);
+    color: var(--primary-offwhite);
+}
+
+.btn-left {
+border-right: none;
+border-radius: 5px 0 0 5px;
+}
+
+.btn-active, .btn-active:hover {
+background-color: var(--primary);
+color: var(--primary-offwhite);
+}
+
+a {
+    color: var(--primary-dark);
+}
+
+a:hover {
+    color: var(--primary-light)
+}
+
+.category-wrap {
+    margin-bottom: 3rem;
+}

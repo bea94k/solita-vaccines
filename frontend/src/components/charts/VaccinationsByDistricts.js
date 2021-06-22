@@ -1,5 +1,12 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import "./Charts.css";
+
+const style = getComputedStyle(document.body);
+const femaleColor = style.getPropertyValue("--orange");
+const maleColor = style.getPropertyValue("--purple");
+const nonbinaryColor = style.getPropertyValue("--green");
+const cutBorder = style.getPropertyValue("--gray");
 
 const VaccinationsByDistrict = ({ vaccinations }) => {
   const data = {
@@ -15,7 +22,9 @@ const VaccinationsByDistrict = ({ vaccinations }) => {
           vaccinations.female.TAYS,
           vaccinations.female.TYKS,
         ],
-        backgroundColor: ["red"],
+        backgroundColor: femaleColor,
+        borderColor: cutBorder,
+        borderWidth: 1,
       },
       {
         stack: "stack1",
@@ -27,7 +36,9 @@ const VaccinationsByDistrict = ({ vaccinations }) => {
           vaccinations.male.TAYS,
           vaccinations.male.TYKS,
         ],
-        backgroundColor: ["blue"],
+        backgroundColor: maleColor,
+        borderColor: cutBorder,
+        borderWidth: 1,
       },
       {
         stack: "stack1",
@@ -39,12 +50,22 @@ const VaccinationsByDistrict = ({ vaccinations }) => {
           vaccinations.nonbinary.TAYS,
           vaccinations.nonbinary.TYKS,
         ],
-        backgroundColor: ["yellow"],
+        backgroundColor: nonbinaryColor,
+        borderColor: cutBorder,
+        borderWidth: 1,
       },
     ],
   };
 
-  return <Bar data={data} />;
+  return (
+    <>
+      <div className="chart-wrap">
+        <div className="bar-chart-wrap">
+          <Bar data={data} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default VaccinationsByDistrict;
