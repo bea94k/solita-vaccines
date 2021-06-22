@@ -6,6 +6,7 @@ import DosesByProducer from "./charts/DosesByProducer";
 import DosesByDistrict from "./charts/DosesByDistrict";
 import VaccinationsByDistricts from "./charts/VaccinationsByDistricts";
 import ExpiredByProducer from "./charts/ExpiredByProducer";
+import ExpiringSoon from "./charts/ExpiringSoon";
 
 const PerDay = ({ doses }) => {
   const [perDayData, setPerDayData] = useState();
@@ -58,8 +59,11 @@ const PerDay = ({ doses }) => {
           <h3>Vaccinations performed - healthcare districts</h3>
           <VaccinationsByDistricts vaccinations={perDayData.vaccinations} />
 
-          <h3>Bottles expired - producers</h3>
+          <h3>Bottles expired on that day - producers</h3>
           <ExpiredByProducer expired={perDayData.orders.expired} />
+
+          <h3>Bottles expiring in the next 10 days</h3>
+          <ExpiringSoon expiring={perDayData.orders.expiringSoon} />
         </>
       )}
     </div>
